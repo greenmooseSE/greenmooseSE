@@ -1,19 +1,120 @@
 name: Metrics
+
+# Schedule daily workflow runs
 on:
-  # Schedule daily updates
-  schedule: [{cron: "0 0 * * *"}]
-  # (optional) Run workflow manually
+  schedule:
+    - cron: "0 0 * * *"
+  # Allow manual workflow runs
   workflow_dispatch:
-  # (optional) Run workflow when pushing on master/main
-  push: {branches: ["master", "main"]}
+  # Run workflow when pushing to master or main
+  push:
+    branches:
+      - master
+      - main
+
 jobs:
   github-metrics:
+    # Use latest Ubuntu runner
     runs-on: ubuntu-latest
-    environment: 
-      name: production
+
+    # Set permissions for updating repository contents
     permissions:
       contents: write
+
     steps:
+      # Use lowlighter/metrics action
       - uses: lowlighter/metrics@latest
         with:
+          # Personal access token for accessing GitHub API
+          # Should have repo, read:user, read:org, user scopes
           token: ${{ secrets.METRICS_TOKEN }}
+
+          # Username to generate metrics for
+          user: greenmooseSE
+
+          # Metrics card template style
+          template: classic
+
+          # Base sections to include
+          base: header, activity, community, repositories, metadata
+
+          # Set timezone for metrics (change as needed)
+          config_timezone: Europe/Stockholm
+
+          # Enable programming languages stats
+          plugin_languages: yes
+
+          # Ignore certain languages in metrics
+          plugin_languages_ignored: >
+            html, css
+
+          # Limit number of languages shown
+          plugin_languages_limit: 8
+
+          # Sections of language stats to include
+          plugin_languages_sections: most-used, recently-used
+
+          # Enable recent activity stats (comments/issues/PRs)
+          plugin_followup: yes
+
+          # Show starred repositories
+          plugin_stars: yes
+
+          # Show repository topics
+          plugin_topics: yes
+
+          # Show notable contributions and repositories
+          plugin_notable: yes
+
+          # Enable reaction stats
+          plugin_reactions: yes
+
+          # Limit number of reactions shown
+          plugin_reactions_limit: 4
+
+          # Show detailed reaction stats (count and percentage)
+          plugin_reactions_details: count, percentage
+
+          # Show achievements
+          plugin_achievements: yes
+
+          # Only show achievements above a certain threshold
+          plugin_achievements_threshold: B
+
+          # Show secret achievements
+          plugin_achievements_secrets: yes
+
+          # Use compact achievement display
+          plugin_achievements_display: compact
+
+          # Show contributors to your repositories
+          plugin_contributors: yes
+
+          # Enable sponsorship stats (if public)
+          plugin_sponsors: yes
+
+          # Show projects you contributed to
+          plugin_projects: yes
+
+          # Limit number of projects shown
+          plugin_projects_limit: 4
+
+          # Show GitHub discussions participation
+          plugin_discussions: yes
+
+          # Show contribution calendar
+          plugin_calendar: yes
+
+          # Show repository traffic (clones/views)
+          plugin_traffic: yes
+
+          # Limit number of repos for traffic stats
+          plugin_traffic_limit: 4
+
+          # Include stats from organization/member/collaborator repos
+          repositories_affiliations: owner, organization_member, collaborator
+
+          # Include forks in repository stats
+          repositories_forks: yes
+
+          # For more plugins/options, see https://github.com/lowlighter/metrics#-plugins
