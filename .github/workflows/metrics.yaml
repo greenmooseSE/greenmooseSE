@@ -108,9 +108,6 @@ jobs:
           # Show repository traffic (clones/views)
           plugin_traffic: yes
 
-          # Limit number of repos for traffic stats
-          plugin_traffic_limit: 4
-
           # Include stats from organization/member/collaborator repos
           repositories_affiliations: owner, organization_member, collaborator
 
