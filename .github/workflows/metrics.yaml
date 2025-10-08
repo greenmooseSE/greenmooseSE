@@ -11,107 +11,94 @@ on:
     branches:
       - master
       - main
+      - try/moreStats
 
 jobs:
   github-metrics:
-    # Use latest Ubuntu runner
+    # Use latest Ubuntu runner for maximum compatibility
     runs-on: ubuntu-latest
 
-    # Set permissions for updating repository contents
+    # Set permissions so workflow can update repository files
     permissions:
       contents: write
 
     steps:
-      # Use lowlighter/metrics action
+      # Use the lowlighter/metrics action to generate metrics
       - uses: lowlighter/metrics@latest
         with:
-          # Personal access token for accessing GitHub API
-          # Should have repo, read:user, read:org, user scopes
+          # Token must be a classic PAT with repo, read:user, read:org, user scopes for full access
           token: ${{ secrets.METRICS_TOKEN }}
 
-          # Username to generate metrics for
+          # GitHub username to generate the metrics for
           user: greenmooseSE
 
-          # Metrics card template style
+          # Select a visually rich template
           template: classic
 
-          # Base sections to include
+          # Include all base sections for full coverage
           base: header, activity, community, repositories, metadata
 
-          # Set timezone for metrics (change as needed)
+          # Set timezone for accurate stats
           config_timezone: Europe/Stockholm
 
-          # Enable programming languages stats
+          # Show most used and recently used programming languages
           plugin_languages: yes
-
-          # Ignore certain languages in metrics
+          plugin_languages_sections: most-used, recently-used
+          # Ignore markup languages to keep the stats relevant
           plugin_languages_ignored: >
             html, css
-
-          # Limit number of languages shown
+          # Show up to 8 languages for breadth
           plugin_languages_limit: 8
 
-          # Sections of language stats to include
-          plugin_languages_sections: most-used, recently-used
+          # Show multi-year commit history graph
+          plugin_calendar: yes
+          # Set minimum years to cover in history (e.g., 5 years)
+          plugin_calendar_limit: 5
 
-          # Enable recent activity stats (comments/issues/PRs)
-          plugin_followup: yes
-
-          # Show starred repositories
-          plugin_stars: yes
-
-          # Show repository topics
-          plugin_topics: yes
-
-          # Show notable contributions and repositories
+          # Show notable repositories you contributed to
           plugin_notable: yes
 
-          # Enable reaction stats
+          # Show latest stars you gave to other repos
+          plugin_stars: yes
+
+          # Show repository topics for more context
+          plugin_topics: yes
+
+          # Show recent activity across issues, PRs, comments
+          plugin_followup: yes
+
+          # Show reactions to your contributions
           plugin_reactions: yes
-
-          # Limit number of reactions shown
           plugin_reactions_limit: 4
-
-          # Show detailed reaction stats (count and percentage)
           plugin_reactions_details: count, percentage
 
-          # Show achievements
+          # Show your GitHub achievements (including secret ones)
           plugin_achievements: yes
-
-          # Only show achievements above a certain threshold
-          plugin_achievements_threshold: B
-
-          # Show secret achievements
-          plugin_achievements_secrets: yes
-
-          # Use compact achievement display
           plugin_achievements_display: compact
+          plugin_achievements_secrets: yes
+          plugin_achievements_threshold: B
 
           # Show contributors to your repositories
           plugin_contributors: yes
 
-          # Enable sponsorship stats (if public)
+          # Show sponsorship info if available
           plugin_sponsors: yes
 
-          # Show projects you contributed to
+          # Show open source projects you contributed to
           plugin_projects: yes
-
-          # Limit number of projects shown
           plugin_projects_limit: 4
 
-          # Show GitHub discussions participation
+          # Show your participation in GitHub Discussions
           plugin_discussions: yes
 
-          # Show contribution calendar
-          plugin_calendar: yes
-
-          # Show repository traffic (clones/views)
+          # Show repository traffic stats (public only, API limits apply)
           plugin_traffic: yes
 
-          # Include stats from organization/member/collaborator repos
+          # Include stats from all repositories you own, collaborate on, or are member of
           repositories_affiliations: owner, organization_member, collaborator
 
-          # Include forks in repository stats
+          # Include forks in repository statistics
           repositories_forks: yes
 
-          # For more plugins/options, see https://github.com/lowlighter/metrics#-plugins
+          # For more plugins and options, see:
+          # https://github.com/lowlighter/metrics#-plugins
