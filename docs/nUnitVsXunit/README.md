@@ -21,6 +21,7 @@
 | 17  | Exec/Disc   | Skip at Runtime                        | ✅ `Assert.Ignore()` and `Assert.Inconclusive()`                                                            | ❌ No runtime skip; only static skip via `[Fact(Skip = "...")]`                                         | NUnit supports dynamic skip; xUnit requires custom extension or fails the test.                                                                  |
 | 18  | Exec/Disc   | Test Discovery                         | ⚠️ Test names can be duplicated (by params/data)                                                            | ❌ Test method names must be unique per class                                                          | xUnit may hang or misbehave with duplicate test method names.                                                                                    |
 | 19  | Logging     | Logging to Console                     | ✅ Console logging captured and displayed in all runners                                                    | ❌ `Console.WriteLine` output not reliably captured, esp. in Rider                                      | xUnit recommends using `ITestOutputHelper`, which is more complex, and Rider may not show console output.                                        |
+| 20  | Attribute   | Custom Category Attribute (e.g. `[LongRunningTest]`) | ✅ Deriving from `[Category]` is straightforward:<br>🔹 `class LongRunningTestAttribute : CategoryAttribute { ... }` | ⚠️ Must implement `ITraitAttribute` **and** `ITraitDiscoverer`:<br>🔹 Non-trivial:<br>🔸 Custom attribute must implement interface, provide discoverer, and register via `[TraitDiscoverer]` | **NUnit:** Extending category is trivial—just derive from `CategoryAttribute`.<br>**xUnit:** You must implement a custom trait attribute and a discoverer, which is more complex and requires additional registration. |
 
 ---
 
@@ -28,16 +29,11 @@
 
 | Favorable                    | Rows (IDs)                                | Count |
 |-----------------------------|--------------------------------------------|-------|
-| **NUnit favorable**         | 01, 02, 03, 05, 09, 10, 11, 14, 15, 17, 19 | 11    |
+| **NUnit favorable**         | 01, 02, 03, 05, 09, 10, 11, 14, 15, 17, 19, 20 | 12    |
 | **xUnit favorable**         | 07, 13                                     | 2     |
 | **Both favorable**          | 04, 08                                     | 2     |
 | **Neutral or Mixed**        | 06, 12, 16, 18                             | 4     |
-| **Total Rows**              |                                            | 19    |
-
-- **NUnit favorable:** `[Category]` attribute, `[Explicit]` attribute, `[TestCaseSource]/[Test]` usage, test timeout, internal test classes, parameterized fixtures, parameterized tests, test case source/theories, test case source/private static field, skip at runtime, logging to console.
-- **xUnit favorable:** Per-test `Dispose` (resource cleanup), test class instance per test (isolation).
-- **Both favorable:** No required class attribute for test discovery, fixture/context sharing.
-- **Neutral or Mixed:** Async void test support, setup/teardown, parallel test execution, test discovery (duplicate names).
+| **Total Rows**              |                                            | 20    |
 
 ---
 
@@ -59,4 +55,4 @@
 
 ---
 
-_Updated 2025-07-17_
+_Updated 2025-10-08_
