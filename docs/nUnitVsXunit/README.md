@@ -22,6 +22,7 @@
 | 18  | Exec/Disc   | Test Discovery                         | ⚠️ Test names can be duplicated (by params/data)                                                            | ❌ Test method names must be unique per class                                                          | xUnit may hang or misbehave with duplicate test method names.                                                                                    |
 | 19  | Logging     | Logging to Console                     | ✅ Console logging captured and displayed in all runners                                                    | ❌ `Console.WriteLine` output not reliably captured, esp. in Rider                                      | xUnit recommends using `ITestOutputHelper`, which is more complex, and Rider may not show console output.                                        |
 | 20  | Attribute   | Custom Category Attribute (e.g. `[LongRunningTest]`) | ✅ Deriving from `[Category]` is straightforward:<br>🔹 `class LongRunningTestAttribute : CategoryAttribute { ... }` | ⚠️ Must implement `ITraitAttribute` **and** `ITraitDiscoverer`:<br>🔹 Non-trivial:<br>🔸 Custom attribute must implement interface, provide discoverer, and register via `[TraitDiscoverer]` | **NUnit:** Extending category is trivial—just derive from `CategoryAttribute`.<br>**xUnit:** You must implement a custom trait attribute and a discoverer, which is more complex and requires additional registration. |
+| 21  | Attribute   | [Retry] Attribute                      | ✅ `[Retry(n)]` attribute supported on tests/fixtures                                                       | ❌ No built-in `[Retry]` attribute                                                                      | NUnit has first-class retry support. xUnit requires custom extensions or implementing retry logic manually. |
 
 ---
 
@@ -29,11 +30,11 @@
 
 | Favorable                    | Rows (IDs)                                | Count |
 |-----------------------------|--------------------------------------------|-------|
-| **NUnit favorable**         | 01, 02, 03, 05, 09, 10, 11, 14, 15, 17, 19, 20 | 12    |
+| **NUnit favorable**         | 01, 02, 03, 05, 09, 10, 11, 14, 15, 17, 19, 20, 21 | 13    |
 | **xUnit favorable**         | 07, 13                                     | 2     |
 | **Both favorable**          | 04, 08                                     | 2     |
 | **Neutral or Mixed**        | 06, 12, 16, 18                             | 4     |
-| **Total Rows**              |                                            | 20    |
+| **Total Rows**              |                                            | 21    |
 
 ---
 
@@ -55,4 +56,4 @@
 
 ---
 
-_Updated 2025-10-08_
+_Updated 2026-02-18_
